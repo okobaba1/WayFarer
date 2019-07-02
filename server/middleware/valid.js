@@ -5,7 +5,6 @@ const validator = [
   check('last_name').not().isEmpty().withMessage('Last name field cannot be empty.'),
   check('email').not().isEmpty().withMessage('Email field cannot be empty'),
   check('email').isEmail().withMessage('Enter valid email address.'),
-  check('address').not().isEmpty().withMessage('Address cannot be empty.'),
   check('password').not().isEmpty().withMessage('Please password is required'),
   check('password').isLength({ min: 6 }).withMessage('Password should be atleast 6 characters'),
 
