@@ -24,7 +24,6 @@ const Migration = {
         email VARCHAR(255) UNIQUE NOT NULL,
         first_name VARCHAR(128) NOT NULL,
         last_name VARCHAR(128) NOT NULL,
-        address VARCHAR(128) NOT NULL,
         password TEXT NOT NULL,
         is_admin BOOLEAN DEFAULT false
       );
@@ -66,14 +65,13 @@ const Migration = {
     `);
 
       const adminQuery = `INSERT INTO
-    users(email, first_name, last_name, address, password, is_admin)
-    VALUES($1,$2,$3,$4,$5,$6)
-    RETURNING email, first_name, last_name, address, is_admin`;
+    users(email, first_name, last_name, password, is_admin)
+    VALUES($1,$2,$3,$4,$5)
+    RETURNING email, first_name, last_name, is_admin`;
       const values = [
-        'victoradmin@quickcredit.com',
+        'victoradmin@wayfarer.com',
         'Victor',
         'Admin',
-        '1, wayfarer Avenue',
         await bcrypt.hash('password', 10),
         true,
       ];
