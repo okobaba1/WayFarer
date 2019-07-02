@@ -41,12 +41,13 @@ const Users = {
       }, process.env.SECRET_KEY, { expiresIn: '24hrs' });
       return res.status(201).json({
         status: 201,
-        token,
         data: {
           id,
           first_name,
           last_name,
           email,
+          is_admin,
+          token,
         },
       });
     } catch (error) {
