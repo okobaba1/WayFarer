@@ -36,7 +36,8 @@
     "build": "babel server/ -d dist",
     "serve": "node -- dist/app.js",
     "start": "npm run build && npm run serve",
-    "start:dev": "nodemon server/app.js --exec babel-node"
+    "start:dev": "nodemon server/app.js --exec babel-node",
+    "db:migrate": "babel-node ./server/database/migration"
   },
   "repository": {
     "type": "git",
