@@ -4,6 +4,8 @@
   "description": "WayFarer is a public bus transportation booking server.",
   "main": "index.js",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
