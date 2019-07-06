@@ -5,6 +5,9 @@ import db from './dbconnection';
 const Migration = {
   async migrate() {
     try {
+      console.log('connect to database');
+      await db.query('c wayfarer_testdb');
+
       console.log('Dropping users table');
       await db.query('DROP TABLE IF EXISTS users CASCADE');
 
