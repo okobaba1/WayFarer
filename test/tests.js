@@ -13,10 +13,9 @@ describe('User', ()=> {
   it('should sign up a user', (done) => {
     const user = {
       email: 'victor@gmail.com',
-      firstName: 'moke',
-      lastName: 'ilo',
+      first_name: 'moke',
+      last_name: 'ilo',
       password: '1234hdgdpds',
-      address: 'Lagos house',
     };
     chai.request(app)
       .post('/api/v1/auth/signup')
@@ -33,10 +32,9 @@ describe('User', ()=> {
   it('User already exists', (done) => {
     const user = {
       email: 'victor@gmail.com',
-      firstName: 'moke',
-      lastName: 'ilo',
+      first_name: 'moke',
+      last_name: 'ilo',
       password: '1234hdgdpds',
-      address: '12 wer',
     };
     chai.request(app)
       .post('/api/v1/auth/signup')
