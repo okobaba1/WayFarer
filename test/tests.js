@@ -49,4 +49,22 @@ describe('User', ()=> {
         done();
       });
   });
+  it('should sign up a user', (done) => {
+    const user = {
+      email: 'victor@gmail.com',
+      firstname: 'moke',
+      lastname: 'ilo',
+      password: '1234hdgdpds',
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.status, 400);
+        done();
+      });
+  });
 })
