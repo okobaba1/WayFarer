@@ -42,7 +42,7 @@
     "start:dev": "nodemon server/app.js --exec babel-node",
     "coveralls": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
     "db:migrate": "babel-node ./server/database/migration",
-    "testmigrate": "babel-node ./server/database/testmigration"
+    "testmigrate": "psql -U postgres -f ./server/database/testmigration.sql"
   },
   "repository": {
     "type": "git",
