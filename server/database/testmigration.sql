@@ -1,40 +1,52 @@
-DROP DATABASE IF EXISTS quickcredit_testdb;
-CREATE DATABASE quickcredit_testdb;
-\c quickcredit_testdb;
+DROP DATABASE IF EXISTS wayfarer_testdb;
+CREATE DATABASE wayfarer_testdb;
+\c wayfarer_testdb;
 
   CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    firstname VARCHAR(128) NOT NULL,
-    lastname VARCHAR(128) NOT NULL,
-    address VARCHAR(128) NOT NULL,
+    first_name VARCHAR(128) NOT NULL,
+    last_name VARCHAR(128) NOT NULL,
     password TEXT NOT NULL,
-    status VARCHAR(50) DEFAULT 'unverified',
-    isadmin BOOLEAN DEFAULT false
+    is_admin BOOLEAN DEFAULT false
   );
 
 
-  DROP TYPE IF EXISTS loan_status;
-  CREATE TYPE loan_status as ENUM ('pending', 'approved', 'rejected');
-  CREATE TABLE IF NOT EXISTS loans(
+  CREATE TABLE IF NOT EXISTS buses(
     id SERIAL PRIMARY KEY,
-    email VARCHAR(255) REFERENCES users(email) ON DELETE CASCADE,
-    createdOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status loan_status DEFAULT 'pending',
-    repaid BOOLEAN DEFAULT false,
-    tenor INTEGER NOT NULL,
-    amount FLOAT NOT NULL,
-    paymentInstallment FLOAT NOT NULL,
-    balance FLOAT NOT NULL,
-    interest FLOAT NOT NULL
+    number_plate VARCHAR(128) NOT NULL,
+    manufacturer VARCHAR(128) NOT NULL,
+    model VARCHAR(128) NOT NULL,
+    year INTEGER NOT NULL,
+    capacity INTEGER NOT NULL
   );
 
 
-  CREATE TABLE IF NOT EXISTS repayments(
+  CREATE TABLE IF NOT EXISTS trips(
     id SERIAL PRIMARY KEY,
-    createdOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    loanId INTEGER REFERENCES loans(id) on DELETE CASCADE,
-    amount FLOAT NOT NULL
+    bus_id INTEGER REFERENCES buses(id) on DELETE CASCADE,
+    origin VARCHAR(128) NOT NULL,
+    destination VARCHAR(128) NOT NULL,
+    trip_date DATE NOT NULL,
+    fare FLOAT NOT NULL,
+    status VARCHAR(50) DEFAULT 'active'
   );
+
+  CREATE TABLE IF NOT EXISTS bookings(
+    id SERIAL PRIMARY KEY,
+    trip_id INTEGER REFERENCES trips(id) on DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) on DELETE CASCADE,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
+  INSERT INTO users
+  (email, first_name, last_name, password, is_admin)
+    VALUES(
+    'victoradmin@wayfarer.com',
+    'Victor',
+    'Admin',
+    '$2b$10$wzLmW0y./nfew45DThKKDOzcyse7IL5zYZ30ei8bc5.FFANiDYRJW',
+    true);
+    
 
 
