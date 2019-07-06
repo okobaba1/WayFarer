@@ -1,0 +1,22 @@
+language: node_js
+
+services:
+  - postgresql
+node_js: 
+  - "stable"
+env:
+  global:
+    - NODE_ENV=test
+
+install: 
+  - npm install
+
+before_script:
+  - psql -c "CREATE DATABASE wayfarer_testdb;" -U postgres
+script:
+  - npm run test
+  - npm run coveralls
+
+cache:
+  directories:
+    - node_modules
