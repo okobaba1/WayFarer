@@ -12,7 +12,7 @@ install:
   - npm install
 
 before_script:
-  - psql -c "CREATE DATABASE wayfarer_testdb;" -U user
+  - psql -c "CREATE DATABASE wayfarer_testdb;" -U postgres
 script:
   - npm run test
   - npm run coveralls
