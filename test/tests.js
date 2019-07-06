@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../app';
+import app from '../server/app';
 
 const {
   expect, assert, should,
