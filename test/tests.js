@@ -1,11 +1,13 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../server/database/dbconnection';
+import app from '../server/app';
+import dotenv from 'dotenv';
 
 const {
   expect, assert, should,
 } = chai;
 chai.use(chaiHttp);
+dotenv.config();
 should();
 
 
