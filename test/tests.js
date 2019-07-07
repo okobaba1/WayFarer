@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../server/app';
+import app from '../server/database/dbconnection';
 
 const {
   expect, assert, should,
