@@ -1,3 +1,7 @@
+-- DROP DATABASE IF EXISTS wayfarer_testdb;
+-- CREATE DATABASE wayfarer_testdb;
+\c wayfarer_testdb;
+
   CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
