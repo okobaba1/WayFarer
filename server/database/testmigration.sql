@@ -1,5 +1,5 @@
--- DROP DATABASE IF EXISTS wayfarer_testdb;
--- CREATE DATABASE wayfarer_testdb;
+DROP DATABASE IF EXISTS wayfarer_testdb;
+CREATE DATABASE wayfarer_testdb;
 \c wayfarer_testdb;
 
   CREATE TABLE IF NOT EXISTS users(

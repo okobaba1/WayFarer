@@ -36,7 +36,7 @@
     "nyc": "^14.1.1"
   },
   "scripts": {
-    "test": "npm run testmigrate && cross-env NODE_ENV=test mocha --require @babel/register  --exit --timeout 20000",
+    "test": "npm run testmigrate && cross-env NODE_ENV=test nyc mocha --require @babel/register  --exit --timeout 20000",
     "build": "babel server/ -d dist",
     "serve": "node -- dist/app.js",
     "start": "npm run build && npm run serve",
