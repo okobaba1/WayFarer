@@ -13,6 +13,6 @@ module.exports = {
       "sourceType": "module"
   },
   "rules": {
-    eslint-disable camelcase
+    
   }
 };

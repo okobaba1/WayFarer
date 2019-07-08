@@ -7,6 +7,8 @@ const { validator, validationHandler } = valid;
 const router = express.Router();
 
 router.post('/auth/signup', validator, validationHandler, Users.create);
+router.post('/auth/signin', Users.login);
+
 
 
 export default router;

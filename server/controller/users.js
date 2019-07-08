@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../database/dbconnection';
@@ -13,9 +14,9 @@ const Users = {
       const {
         email, first_name, last_name, password,
       } = req.body;
-  
+
       const hashedPassword = await bcrypt.hash(password, 10);
-  
+
       const checkUser = {
         text: 'SELECT * FROM users WHERE email = $1',
         values: [email],
@@ -24,7 +25,7 @@ const Users = {
         text: 'INSERT INTO users(email, first_name, last_name, password) VALUES($1, $2, $3, $4) RETURNING *',
         values: [email, first_name, last_name, hashedPassword],
       };
-  
+
       const { rows } = await db.query(checkUser);
       if (rows[0]) {
         return res.status(409).json({
@@ -49,6 +50,55 @@ const Users = {
           is_admin,
           token,
         },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
+  async login(req, res) {
+    try {
+      if (!req.body.email || !req.body.password) {
+        return res.status(400).json({
+          status: 400,
+          error: 'kindly put in your email and password',
+        });
+      }
+      const { email, password } = req.body;
+      const checkUser = {
+        text: 'SELECT * FROM users WHERE email = $1',
+        values: [email],
+      };
+      const { rows } = await db.query(checkUser);
+      if (!rows[0]) {
+        return res.status(400).json({
+          status: 400,
+          error: 'Please sign Up',
+        });
+      } bcrypt.compare(password, rows[0].password, (error, response) => {
+        if (!response) {
+          return res.status(401).json({
+            status: 401,
+            error: 'Incorrect password',
+          });
+        } const token = jwt.sign({
+          email,
+          id: rows[0].id,
+          is_admin: rows[0].is_admin,
+        }, process.env.SECRET_KEY, { expiresIn: '1024hrs' });
+        return res.status(200).json({
+          status: 200,
+          message: 'login successsful',
+          data: {
+            token,
+            user_id: rows[0].id,
+            first_name: rows[0].first_name,
+            last_name: rows[0].last_name,
+            email: rows[0].email,
+          },
+        });
       });
     } catch (error) {
       return res.status(500).json({
