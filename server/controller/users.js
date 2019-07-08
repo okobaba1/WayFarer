@@ -4,27 +4,27 @@ import db from '../database/dbconnection';
 
 const Users = {
   async create(req, res) {
-    if (!req.body.email || !req.body.password) {
-      return res.status(400).json({
-        message: 'Some values are missing',
-      });
-    }
-    const {
-      email, first_name, last_name, password,
-    } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const checkUser = {
-      text: 'SELECT * FROM users WHERE email = $1',
-      values: [email],
-    };
-    const createQuery = {
-      text: 'INSERT INTO users(email, first_name, last_name, password) VALUES($1, $2, $3, $4) RETURNING *',
-      values: [email, first_name, last_name, hashedPassword],
-    };
-
     try {
+      if (!req.body.email || !req.body.password) {
+        return res.status(400).json({
+          message: 'Some values are missing',
+        });
+      }
+      const {
+        email, first_name, last_name, password,
+      } = req.body;
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      const checkUser = {
+        text: 'SELECT * FROM users WHERE email = $1',
+        values: [email],
+      };
+      const createQuery = {
+        text: 'INSERT INTO users(email, first_name, last_name, password) VALUES($1, $2, $3, $4) RETURNING *',
+        values: [email, first_name, last_name, hashedPassword],
+      };
+  
       const { rows } = await db.query(checkUser);
       if (rows[0]) {
         return res.status(409).json({

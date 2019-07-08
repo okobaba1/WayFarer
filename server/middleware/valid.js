@@ -14,12 +14,12 @@ const validator = [
 const validationHandler = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 400,
       errors: errors.array().map(error => error.msg)[0],
     });
   }
-  next();
+  return next();
 };
 
 const valid = {

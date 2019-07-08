@@ -31,7 +31,9 @@ if (process.env.NODE_ENV === 'production') {
     ssl: true,
   };
 } else if (process.env.NODE_ENV === 'test') {
+  console.log('badd',process.env.NODE_ENV)
   connection = testConfig;
+  console.log('anything')
 } else {
   connection = devConfig;
 }
