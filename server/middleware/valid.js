@@ -7,7 +7,15 @@ const validator = [
   check('email').isEmail().withMessage('Enter valid email address.'),
   check('password').not().isEmpty().withMessage('Please password is required'),
   check('password').isLength({ min: 6 }).withMessage('Password should be atleast 6 characters'),
+];
 
+const makeTrip = [
+  check('fare').not().isEmpty().withMessage('trip fare field cannot be empty.'),
+  check('origin').not().isEmpty().withMessage('Kindly input take off point.'),
+  check('destination').not().isEmpty().withMessage('Kindly input destination.'),
+  check('bus_id').not().isEmpty().withMessage('Kindly input bus id.'),
+  check('trip_date').not().isEmpty().withMessage('Kindly input trip date.'),
+  
 ];
 
 
@@ -25,6 +33,7 @@ const validationHandler = (req, res, next) => {
 const valid = {
   validationHandler,
   validator,
+  makeTrip,
 };
 
 
