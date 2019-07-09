@@ -108,6 +108,45 @@ const Users = {
     }
   },
 
-}
+  async trip(req, res) {
+    try {
+      const {
+        bus_id, origin, destination, trip_date, fare,
+      } = req.body;
+      const checkbus = {
+        text: 'SELECT * FROM buses WHERE id = $1',
+        values: [bus_id],
+      };
+      const { rows } = await db.query(checkbus);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 404,
+          error: 'Not an available bus',
+        });
+      }
+      const createQuery = {
+        text: 'INSERT INTO trips(bus_id, origin, destination, trip_date, fare) VALUES($1, $2, $3, $4, $5) RETURNING *',
+        values: [bus_id, origin, destination, trip_date, fare],
+      };
+      const { rows: create } = await db.query(createQuery);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          trip_id: create[0].id,
+          bus_id,
+          origin,
+          destination,
+          trip_date,
+          fare,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
+};
 
 export default Users;

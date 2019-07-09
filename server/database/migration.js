@@ -75,8 +75,22 @@ const Migration = {
         await bcrypt.hash('password', 10),
         true,
       ];
+
+      const busesQuery = `INSERT INTO buses(
+        number_plate, manufacturer, model, year, capacity)
+    VALUES($1,$2,$3,$4,$5)
+    RETURNING number_plate, manufacturer, model, year, capacity`;
+      const busvalues = [
+        'XCV102',
+        'TOYOTA',
+        'Sienna',
+        2011,
+        12,
+      ];
       console.log('Creating Admin');
       await db.query(adminQuery, values);
+      console.log('Creating bus');
+      await db.query(busesQuery, busvalues);
       console.log('Admin Created');
     } catch (error) {
       console.log(error);

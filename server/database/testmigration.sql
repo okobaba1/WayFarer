@@ -39,14 +39,25 @@ CREATE DATABASE wayfarer_testdb;
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
-  INSERT INTO users
-  (email, first_name, last_name, password, is_admin)
+  INSERT INTO users(
+    email, first_name, last_name, password, is_admin)
     VALUES(
     'victoradmin@wayfarer.com',
     'Victor',
     'Admin',
     '$2b$10$wzLmW0y./nfew45DThKKDOzcyse7IL5zYZ30ei8bc5.FFANiDYRJW',
-    true);
+    true
+  );
+
+  INSERT INTO buses(
+    number_plate, manufacturer, model, year, capacity)
+    VALUES(
+    'XCV102',
+    'TOYOTA',
+    'Sienna',
+    2011,
+    12
+  );
     
 
 
