@@ -13,6 +13,8 @@ should();
 
 describe('User', ()=> {
   const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvcmFkbWluQHdheWZhcmVyLmNvbSIsImlkIjoxLCJpc19hZG1pbiI6dHJ1ZSwiaWF0IjoxNTYyNjI2Mzk3LCJleHAiOjE1NjYzMTI3OTd9.DP78i0BpIkajBVL86g0LVLasXtKv0Cc27pKh6Eihi8o';
+  const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBnbWFpbC5jb20iLCJpZCI6MiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NjI3Njk0NDksImV4cCI6MTU2Mjg1NTg0OX0.CB4XvDWIK4I-zAFg45eWntO41OODs7EkYBlDH94GYSw';
+
   it('App should exists', () => {
     chai.request(app);
     expect(app).to.be.a('function');
@@ -191,5 +193,40 @@ describe('User', ()=> {
         done();
       });
   });
-
+  it('post booking success', (done) => {
+    const user = {
+      trip_id: 1,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .post('/api/v1/bookings')
+      .send(user)
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(201);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('object');
+        assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+  it('post booking not available trip', (done) => {
+    const user = {
+      trip_id: 4,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .post('/api/v1/bookings')
+      .send(user)
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.status, 404);
+        assert.equal(res.body.error, 'trip not available');
+        done();
+      });
+  });
 });
