@@ -12,5 +12,6 @@ router.post('/trips', makeTrip, validationHandler, verifyAdmin, Users.trip);
 router.get('/trips', Users.getTrips);
 router.post('/bookings', verifyUser, Users.makeBooking);
 router.get('/bookings', verifyHelp, Users.getbookings);
+router.delete('/bookings/:id', verifyUser, Users.deleteBooking);
 
 export default router;
