@@ -229,4 +229,40 @@ describe('User', ()=> {
         done();
       });
   });
+  it('User bookings', (done) => {
+    const user = {
+      trip_id: 1,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .get('/api/v1/bookings')
+      .send(user)
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('array');
+        assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+  it('Admin bookings', (done) => {
+    const user = {
+      trip_id: 1,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .get('/api/v1/bookings')
+      .send(user)
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('array');
+        assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
 });
