@@ -60,7 +60,8 @@ const Migration = {
         id SERIAL PRIMARY KEY,
         trip_id INTEGER REFERENCES trips(id) on DELETE CASCADE,
         user_id INTEGER REFERENCES users(id) on DELETE CASCADE,
-        created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        seat_number INTEGER NOT NULL
       );
     `);
 

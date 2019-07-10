@@ -58,6 +58,7 @@ const Users = {
       });
     }
   },
+
   async login(req, res) {
     try {
       if (!req.body.email || !req.body.password) {
@@ -161,6 +162,71 @@ const Users = {
       return res.status(200).json({
         status: 'success',
         data: rows,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
+
+  async makeBooking(req, res) {
+    try {
+      const { email, id } = req.user;
+      const { trip_id, seat_number } = req.body;
+      const checkUser = {
+        text: 'SELECT * FROM users WHERE email = $1',
+        values: [email],
+      };
+      const status = 'active';
+      const checkTrip = {
+        text: 'SELECT * FROM trips where id = $1 AND status = $2',
+        values: [trip_id, status],
+      };
+      const checkSeat = {
+        text: 'SELECT * FROM bookings where trip_id = $1 AND seat_number = $2',
+        values: [trip_id, seat_number],
+      };
+      const { rows } = await db.query(checkUser);
+      if (!rows[0]) {
+        return res.status(401).json({
+          status: 401,
+          error: 'Please sign up',
+        });
+      }
+      const { rows: trip } = await db.query(checkTrip);
+      if (!trip[0]) {
+        return res.status(404).json({
+          status: 404,
+          error: 'trip not available',
+        });
+      }
+      const { rows: seat } = await db.query(checkSeat);
+      if (seat[0]) {
+        return res.status(409).json({
+          status: 409,
+          error: 'Seat number already taken',
+        });
+      }
+      const createQuery = {
+        text: 'INSERT INTO bookings(trip_id, user_id, seat_number) VALUES($1, $2, $3) RETURNING *',
+        values: [trip_id, id, seat_number],
+      };
+      const { rows: booking } = await db.query(createQuery);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          booking_id: booking[0].id,
+          user_id: id,
+          trip_id,
+          bus_id: trip[0].bus_id,
+          trip_date: trip[0].trip_date,
+          seat_number,
+          first_name: rows[0].first_name,
+          last_name: rows[0].last_name,
+          email,
+        },
       });
     } catch (error) {
       return res.status(500).json({

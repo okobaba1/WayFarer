@@ -10,6 +10,6 @@ router.post('/auth/signup', validator, validationHandler, Users.create);
 router.post('/auth/signin', Users.login);
 router.post('/trips', makeTrip, validationHandler, verifyAdmin, Users.trip);
 router.get('/trips', Users.getTrips);
-
+router.post('/bookings', verifyUser, Users.makeBooking);
 
 export default router;
