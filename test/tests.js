@@ -265,4 +265,41 @@ describe('User', ()=> {
         done();
       });
   });
+  // it('User delete booking', (done) => {
+  //   chai.request(app)
+  //     .delete('/api/v1/bookings/1')
+  //     .set('x-access-token', userToken)
+  //     .end((err, res) => {
+  //       res.should.have.status(200);
+  //       expect(res.body).be.an('object');
+  //       expect(res.body.status).be.a('string');
+  //       expect(res.body.data).be.an('object');
+  //       assert.equal(res.body.error, 'booking successfully deleted');
+  //       done();
+  //     });
+  // });
+  it('No booking found', (done) => {
+    chai.request(app)
+      .delete('/api/v1/bookings/4')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No booking found');
+        done();
+      });
+  });
+  it('Not authorized', (done) => {
+    chai.request(app)
+      .delete('/api/v1/bookings/4')
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'Not authorized to perform this operation');
+        done();
+      });
+  });
 });

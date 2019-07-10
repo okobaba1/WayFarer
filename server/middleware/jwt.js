@@ -40,15 +40,15 @@ export const verifyUser = (req, res, next) => {
         status: 500,
         error: 'Failed to Authenticate token',
       });
-    }
-    if (decoded.is_admin == Boolean(true)) {
-      return res.status(401).json({
-        status: 401,
-        error: 'Not authorized to perform this operation',
-      });
-    }
+    }   
     req.user = decoded;
   });
+  if (req.user.is_admin == Boolean(true)) {
+    return res.status(401).json({
+      status: 401,
+      error: 'Not authorized to perform this operation',
+    });
+  }
   return next();
 };
 

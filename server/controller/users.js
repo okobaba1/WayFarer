@@ -275,6 +275,40 @@ const Users = {
       });
     }
   },
+
+  async deleteBooking(req, res) {
+    try {
+      const { bookingId: id } = req.params;
+      const { id: user_id } = req.user;
+      const checkBooking = {
+        text: 'SELECT * FROM bookings where id = $1 AND user_id = $2',
+        values: [id, user_id],
+      };
+      const { rows } = await db.query(checkBooking);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 404,
+          error: 'No booking found',
+        });
+      }
+      const deleteBooking = {
+        text: 'DELETE FROM bookings WHERE id = $1 AND user_id = $2',
+        values: [id, user_id],
+      };
+      await db.query(deleteBooking);
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'booking successfully deleted',
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
 };
 
 export default Users;
