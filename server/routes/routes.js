@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/auth/signup', validator, validationHandler, Users.create);
 router.post('/auth/signin', Users.login);
 router.post('/trips', makeTrip, validationHandler, verifyAdmin, Users.trip);
-
+router.get('/trips', Users.getTrips);
 
 
 export default router;

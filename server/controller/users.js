@@ -147,6 +147,28 @@ const Users = {
       });
     }
   },
+
+  async getTrips(req, res) {
+    try {
+      const getTrips = { text: 'SELECT * FROM trips' };
+      const { rows } = await db.query(getTrips);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 404,
+          error: 'No available trip',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: rows,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
 };
 
 export default Users;

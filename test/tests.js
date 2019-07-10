@@ -145,6 +145,17 @@ describe('User', ()=> {
         done();
       });
   });
+  it('No trips', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips')
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No available trip');
+        done();
+      });
+  });
 
   // create trips
   it('create trips successful', (done) => {
@@ -164,6 +175,18 @@ describe('User', ()=> {
         expect(res.body).be.an('object');
         expect(res.body.status).be.a('string');
         expect(res.body.data).be.an('object');
+        assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+  it('All trips', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips')
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('array');
         assert.equal(res.body.status, 'success');
         done();
       });
