@@ -309,6 +309,39 @@ const Users = {
       });
     }
   },
+
+  async cancelTrip(req, res) {
+    try {
+      const { tripId } = req.params;
+      const checkTrip = {
+        text: 'SELECT * FROM trips WHERE id = $1 and status = $2',
+        values: [tripId, 'active'],
+      };
+      const { rows } = await db.query(checkTrip);
+      if (!rows[0]) {
+        return res.status(400).json({
+          status: 400,
+          error: 'Not an active trip',
+        });
+      }
+      const updateTrip = {
+        text: "UPDATE trips SET status = 'cancelled' WHERE id = $1",
+        values: [tripId],
+      };
+      await db.query(updateTrip);
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Trip cancelled successfully',
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
+    }
+  },
 };
 
 export default Users;
