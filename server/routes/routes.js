@@ -13,5 +13,6 @@ router.get('/trips', Users.getTrips);
 router.post('/bookings', verifyUser, Users.makeBooking);
 router.get('/bookings', verifyHelp, Users.getbookings);
 router.delete('/bookings/:id', verifyUser, Users.deleteBooking);
+router.patch('/trips/:tripId', verifyAdmin, Users.cancelTrip);
 
 export default router;
