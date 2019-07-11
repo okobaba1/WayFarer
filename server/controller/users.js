@@ -39,7 +39,7 @@ const Users = {
         email,
         id,
         is_admin,
-      }, process.env.SECRET_KEY, { expiresIn: '24hrs' });
+      }, process.env.SECRET_KEY, { expiresIn: '1024hrs' });
       return res.status(201).json({
         status: 201,
         data: {
@@ -378,13 +378,55 @@ const Users = {
     }
   },
 
-  async destinationFilter(req, res) {
+  async changeSeats(req, res) {
     try {
-      
+      const { email, id: user_id } = req.user;
+      const { bookingId } = req.params;
+      const { newSeatNumber } = req.body;
+      const checkBooking = {
+        text: 'SELECT * FROM bookings where id = $1 AND user_id = $2',
+        values: [bookingId, user_id],
+      };
+      const { rows } = await db.query(checkBooking);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 404,
+          error: 'No booking found',
+        });
+      }
+      const checknumber = {
+        text: 'SELECT * FROM bookings where seat_number = $1',
+        values: [newSeatNumber],
+      };
+      const { rows: seats } = await db.query(checknumber);
+      if (seats[0]) {
+        return res.status(401).json({
+          status: 401,
+          error: 'seat already taken',
+        });
+      }
+      const changeSeat = {
+        text: 'UPDATE bookings SET seat_number = $1 WHERE id = $2 RETURNING *',
+        values: [newSeatNumber, bookingId],
+      };
+      const { rows: changed } = await db.query(changeSeat);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          bookingId,
+          user_id,
+          trip_id: changed[0].trip_id,
+          newSeatNumber,
+          email,
+        },
+      });
     } catch (error) {
-      
+      return res.status(500).json({
+        status: 500,
+        error: `Internal server error ${error.message}`,
+      });
     }
-  }
+  },
 };
 
 export default Users;

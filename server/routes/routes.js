@@ -12,7 +12,8 @@ router.post('/trips', makeTrip, validationHandler, verifyAdmin, Users.trip);
 router.get('/trips', Users.getTrips);
 router.post('/bookings', verifyUser, Users.makeBooking);
 router.get('/bookings', verifyHelp, Users.getbookings);
-router.delete('/bookings/:id', verifyUser, Users.deleteBooking);
+router.delete('/bookings/:bookingId', verifyUser, Users.deleteBooking);
 router.patch('/trips/:tripId', verifyAdmin, Users.cancelTrip);
+router.patch('/bookings/:bookingId', verifyUser, Users.changeSeats);
 
 export default router;

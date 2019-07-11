@@ -13,7 +13,7 @@ should();
 
 describe('User', ()=> {
   const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvcmFkbWluQHdheWZhcmVyLmNvbSIsImlkIjoxLCJpc19hZG1pbiI6dHJ1ZSwiaWF0IjoxNTYyNjI2Mzk3LCJleHAiOjE1NjYzMTI3OTd9.DP78i0BpIkajBVL86g0LVLasXtKv0Cc27pKh6Eihi8o';
-  const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBnbWFpbC5jb20iLCJpZCI6MiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NjI3Njk0NDksImV4cCI6MTU2Mjg1NTg0OX0.CB4XvDWIK4I-zAFg45eWntO41OODs7EkYBlDH94GYSw';
+  const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBnbWFpbC5jb20iLCJpZCI6MiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NjI4NjIxNzIsImV4cCI6MTU2NjU0ODU3Mn0.VxGhw42I10jzeh-RvmQZTfmm3RwtS0l5_RicWUsjui8';
 
   it('App should exists', () => {
     chai.request(app);
@@ -286,6 +286,39 @@ describe('User', ()=> {
         expect(res.body.status).be.a('string');
         expect(res.body.data).be.an('array');
         assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+  it('User change seats bookings', (done) => {
+    const user = {
+      newSeatNumber: 9,
+    };
+    chai.request(app)
+      .patch('/api/v1/bookings/1')
+      .send(user)
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(201);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('object');
+        assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+  it('User change seats no bookings', (done) => {
+    const user = {
+      newSeatNumber: 9,
+    };
+    chai.request(app)
+      .patch('/api/v1/bookings/5')
+      .send(user)
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No booking found');
         done();
       });
   });
