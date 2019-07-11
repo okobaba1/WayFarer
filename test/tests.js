@@ -158,6 +158,30 @@ describe('User', ()=> {
         done();
       });
   });
+  it('No trips origin', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips')
+      .query({ origin: 'ibadan' })
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No available trip');
+        done();
+      });
+  });
+  it('No trips destination', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips')
+      .query({ destination: 'ibadan' })
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No available trip');
+        done();
+      });
+  });
 
   // create trips
   it('create trips successful', (done) => {

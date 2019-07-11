@@ -151,6 +151,41 @@ const Users = {
 
   async getTrips(req, res) {
     try {
+      const { origin, destination } = req.query;
+      if (origin) {
+        const getOrigin = {
+          text: 'SELECT * FROM trips WHERE origin = $1',
+          values: [origin],
+        };
+        const { rows: orijin } = await db.query(getOrigin);
+        if (!orijin[0]) {
+          return res.status(404).json({
+            status: 404,
+            error: 'No available trip',
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          data: orijin,
+        });
+      }
+      if (destination) {
+        const getDestination = {
+          text: 'SELECT * FROM trips WHERE destination = $1',
+          values: [destination],
+        };
+        const { rows: destine } = await db.query(getDestination);
+        if (!destine[0]) {
+          return res.status(404).json({
+            status: 404,
+            error: 'No available trip',
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          data: destine,
+        });
+      }
       const getTrips = { text: 'SELECT * FROM trips' };
       const { rows } = await db.query(getTrips);
       if (!rows[0]) {
@@ -342,6 +377,14 @@ const Users = {
       });
     }
   },
+
+  async destinationFilter(req, res) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 };
 
 export default Users;
