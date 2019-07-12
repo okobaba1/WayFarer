@@ -101,7 +101,7 @@ paths:
           description: Server error
           schema:
             $ref: '#/definitions/errorDef'
-  /bookings/{bookingId}:
+  /bookings/:bookingId:
     delete:
       tags:
         - user
