@@ -15,10 +15,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
-// app.use('/api/v1', router);
-// app.get('*', (req, res) => res.status(200).json({
-//   message: 'WELCOME TO WayFarer',
-// }));
+app.use('/api/v1', router);
+app.get('/', (req, res) => res.status(200).json({
+  message: 'WELCOME TO WayFarer',
+}));
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
