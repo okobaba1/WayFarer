@@ -24,7 +24,7 @@ const validationHandler = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       status: 400,
-      errors: errors.array().map(error => error.msg)[0],
+      error: errors.array().map(error => error.msg)[0],
     });
   }
   return next();
