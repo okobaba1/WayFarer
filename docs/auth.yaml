@@ -33,7 +33,7 @@ paths:
   /auth/signin:        
     post:  
       tags:
-        - auth
+        - Auth
       summary: Sign a user in
       description: Allows registered user to signin
       produces:

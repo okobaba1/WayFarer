@@ -7,7 +7,7 @@ const swaggerDefinition = {
     title: 'WAYFARER',
   },
   host: 'wayfarer0.herokuapp.com/',
-  basePath: '/api/v1',
+  basePath: 'api/v1',
 
   schemes: ['https', 'http'],
   consumes: ['application/json', 'application/x-www-form-urlencoded'],

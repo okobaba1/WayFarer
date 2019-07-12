@@ -18,6 +18,7 @@ app.use(logger('dev'));
 app.use('/api/v1', router);
 app.get('/', (req, res) => res.status(200).json({
   message: 'WELCOME TO WayFarer',
+  documentation: 'https://wayfarer0.herokuapp.com/docs/',
 }));
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
