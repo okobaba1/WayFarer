@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
 import db from '../database/dbconnection';
 
 const Users = {
@@ -114,6 +115,13 @@ const Users = {
       const {
         bus_id, origin, destination, trip_date, fare,
       } = req.body;
+      const dateCheck = moment(trip_date).format('YYYY-MM-DD');
+      if (dateCheck === 'Invalid date') {
+        return res.status(406).json({
+          status: 406,
+          error: 'Please input date in YYYY-MM-DD format',
+        });
+      }
       const checkbus = {
         text: 'SELECT * FROM buses WHERE id = $1',
         values: [bus_id],
