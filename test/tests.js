@@ -33,9 +33,9 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(201);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         expect(res.body.data).be.an('object');
-        assert.equal(res.body.status, 201);
+        assert.equal(res.body.status, 'success');
         done();
       });
   });

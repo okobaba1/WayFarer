@@ -2,6 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import swaggerUI from 'swagger-ui-express';
+import swaggerSpec from './middleware/swagger';
 
 import router from './routes/routes';
 
@@ -13,10 +15,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
-app.use('/api/v1', router);
-app.get('*', (req, res) => res.status(200).json({
-  message: 'WELCOME TO WayFarer',
-}));
+// app.use('/api/v1', router);
+// app.get('*', (req, res) => res.status(200).json({
+//   message: 'WELCOME TO WayFarer',
+// }));
+
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.set('port', port);
 app.listen(port, console.log(`listening to ${port}`));
