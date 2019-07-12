@@ -17,7 +17,7 @@ export const verifyAdmin = (req, res, next) => {
     }  
     req.user = decoded;
   });
-  if (req.user.is_admin != true) {
+  if (req.user.is_admin != Boolean(true)) {
     return res.status(401).json({
       status: 401,
       error: 'Not authorized to perform this operation',
