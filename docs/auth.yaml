@@ -54,10 +54,6 @@ paths:
           description: kindly put in your email and password
           schema:
             $ref: '#/definitions/errorDef'
-        400:
-          description: Please sign up
-          schema:
-            $ref: '#/definitions/errorDef'
         401:
           description: Incorrect Password
           schema:
