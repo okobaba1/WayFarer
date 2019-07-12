@@ -33,20 +33,8 @@ paths:
           description: trip not available
           schema:
             $ref: '#/definitions/errorDef'
-        401:
-          description: No token provided
-          schema:
-            $ref: '#/definitions/errorDef'
         500:
           description: Failed to authenticate route
-          schema:
-            $ref: '#/definitions/errorDef'
-        401:
-          description: Not authorized to perform this operation
-          schema:
-            $ref: '#/definitions/errorDef'
-        500:
-          description: Server error
           schema:
             $ref: '#/definitions/errorDef'
     get:
@@ -109,14 +97,6 @@ paths:
           description: No booking found
           schema:
             $ref: '#/definitions/errorDef'
-        401:
-          description: Not authorized to perform this operation
-          schema:
-            $ref: '#/definitions/errorDef'
-        401:
-          description: No token provided
-          schema:
-            $ref: '#/definitions/errorDef'
         500:
           description: Server error
           schema:
@@ -148,10 +128,6 @@ paths:
             $ref: '#/definitions/errorDef'
         401:
           description: Not authorized to perform this operation
-          schema:
-            $ref: '#/definitions/errorDef'
-        401:
-          description: No token provided
           schema:
             $ref: '#/definitions/errorDef'
         500:

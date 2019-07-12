@@ -29,14 +29,6 @@ paths:
           description: No token provided
           schema:
             $ref: '#/definitions/errorDef'
-        500:
-          description: Failed to authenticate token
-          schema:
-            $ref: '#/definitions/errorDef'
-        401:
-          description: Not authorized to perform this operation
-          schema:
-            $ref: '#/definitions/errorDef'
         400:
           description: input field empty
           schema:
