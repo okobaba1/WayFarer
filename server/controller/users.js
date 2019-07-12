@@ -41,7 +41,7 @@ const Users = {
         is_admin,
       }, process.env.SECRET_KEY, { expiresIn: '1024hrs' });
       return res.status(201).json({
-        status: 201,
+        status: 'success',
         data: {
           id,
           first_name,

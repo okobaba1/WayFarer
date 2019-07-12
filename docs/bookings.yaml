@@ -1,0 +1,256 @@
+paths:
+  /bookings:
+    post:
+      tags:
+        - user
+      security:
+      - x-access-token: []
+      summary: It creates a booking
+      description: Users can create a booking
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Booking object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBookingReq'
+      responses:
+        201:
+          description: success
+          schema:
+            $ref: '#/definitions/CreateBookingRes'
+        409:
+          description: Seat number already taken
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: Please sign up
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: trip not available
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: No token provided
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Failed to authenticate route
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: Not authorized to perform this operation
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+    get:
+      tags:
+        - user
+        - admin
+      security:
+      - x-access-token: []
+      summary: It gets all bookings
+      description: Users get their own bookings while admin gets all bookings
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/GetBookingsRes'
+        404:
+          description: No booking found
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: No token provided
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /bookings/{bookingId}:
+    get:
+      tags:
+        - user
+      security:
+      - x-access-token: []
+      summary: It enables user change seats after booking
+      description: Users can change seat number
+      produces:
+      - application/json
+      parameters:
+      - name: bookingId
+        in: path
+        description: path parameter takes the booking id
+        required: true
+        type: number
+      - name: body
+        in: body
+        description: Booking object
+        required: true
+      responses:
+        201:
+          description: success
+          schema:
+            $ref: '#/definitions/changeSeatsRes'
+        401:
+          description: Seat already taken
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: No booking found
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: Not authorized to perform this operation
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: No token provided
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /bookings/{bookingId}:
+    delete:
+      tags:
+        - user
+      security:
+      - x-access-token: []
+      summary: It deletes a booking
+      description: Users can delete a specific booking
+      produces:
+      - application/json
+      parameters:
+      - name: bookingId
+        in: path
+        description: path parameter takes the booking id
+        required: true
+        type: number
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/DeleteBookingRes'
+        404:
+          description: No booking found
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: Not authorized to perform this operation
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: No token provided
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+definitions:
+  CreateBookingReq:
+    type: object
+    properties:
+      trip_id:
+        type: string
+      seat_number:
+        type: string
+  CreateBookingRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          booking_id:
+            type: string
+          user_id:
+            type: string
+          trip_id:
+            type: string
+          bus_id:
+            type: string 
+          trip_date:
+            type: string 
+          seat_number:
+            type: string 
+          first_name:
+            type: string 
+          last_name:
+            type: string  
+          email:
+            type: string  
+          created_on:
+            type: string
+  GetBookingsRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            booking_id:
+              type: string
+            user_id:
+              type: string
+            trip_id:
+              type: string
+            bus_id:
+              type: string 
+            trip_date:
+              type: string 
+            seat_number:
+              type: string 
+            first_name:
+              type: string 
+            last_name:
+              type: string  
+            email:
+              type: string  
+            created_on:
+              type: string
+  changeSeatsRes:
+    type: object
+    properties:
+      bookingId:
+        type: string
+      user_id:
+        type: string
+      trip_id:
+        type: string
+      newSeatNumber:
+        type: string 
+      email:
+        type: string
+  DeleteBookingRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          message:
+            type: string       
+  errorDef:
+    type: object
+    properties:
+      status:
+        type: string
+      error:
+        type: string
