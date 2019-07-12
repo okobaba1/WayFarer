@@ -57,7 +57,7 @@ export const verifyHelp = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       status: 401,
-      message: 'No token provided.',
+      error: 'No token provided.',
     });
   }
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {

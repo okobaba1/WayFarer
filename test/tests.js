@@ -205,6 +205,45 @@ describe('User', ()=> {
         done();
       });
   });
+  it('create trips no token provided', (done) => {
+    const user = {
+      bus_id: 1,
+      origin: 'Lagos',
+      destination: 'Abuja',
+      trip_date: '2019-07-24',
+      fare: 26000,
+    };
+    chai.request(app)
+      .post('/api/v1/trips')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(401);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No token provided.');
+        done();
+      });
+  });
+  it('create trips invalid date', (done) => {
+    const user = {
+      bus_id: 1,
+      origin: 'Lagos',
+      destination: 'Abuja',
+      trip_date: '2019-07-2409',
+      fare: 26000,
+    };
+    chai.request(app)
+      .post('/api/v1/trips')
+      .send(user)
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        res.should.have.status(406);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'Please input date in YYYY-MM-DD format');
+        done();
+      });
+  });
   it('All trips', (done) => {
     chai.request(app)
       .get('/api/v1/trips')
@@ -271,6 +310,23 @@ describe('User', ()=> {
         done();
       });
   });
+  it('User bookings', (done) => {
+    const user = {
+      trip_id: 1,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .get('/api/v1/bookings')
+      .send(user)
+      // .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No token provided.');
+        done();
+      });
+  });
   it('Admin bookings', (done) => {
     const user = {
       trip_id: 1,
@@ -322,19 +378,19 @@ describe('User', ()=> {
         done();
       });
   });
-  // it('User delete booking', (done) => {
-  //   chai.request(app)
-  //     .delete('/api/v1/bookings/1')
-  //     .set('x-access-token', userToken)
-  //     .end((err, res) => {
-  //       res.should.have.status(200);
-  //       expect(res.body).be.an('object');
-  //       expect(res.body.status).be.a('string');
-  //       expect(res.body.data).be.an('object');
-  //       assert.equal(res.body.error, 'booking successfully deleted');
-  //       done();
-  //     });
-  // });
+  it('User delete booking', (done) => {
+    chai.request(app)
+      .delete('/api/v1/bookings/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('string');
+        expect(res.body.data).be.an('object');
+        assert.equal(res.body.data.message, 'booking successfully deleted');
+        done();
+      });
+  });
   it('No booking found', (done) => {
     chai.request(app)
       .delete('/api/v1/bookings/4')
