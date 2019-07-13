@@ -27,7 +27,7 @@ export const verifyAdmin = (req, res, next) => {
 };
 
 export const verifyUser = (req, res, next) => {
-  const { token } = req.headers;
+  const token = req.headers['x-access-token'];
   if (!token) {
     return res.status(401).json({
       status: 401,
