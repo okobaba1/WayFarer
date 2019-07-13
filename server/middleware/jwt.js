@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 export const verifyAdmin = (req, res, next) => {
-  const { token } = req.headers;
+  const tokenBearer = req.headers.authorization;
+  const token = tokenBearer.slice(7, tokenBearer.length);
   if (!token) {
     return res.status(402).json({
       status: 402,
@@ -14,7 +15,7 @@ export const verifyAdmin = (req, res, next) => {
         status: 500,
         error: 'Failed to Authenticate token',
       });
-    }  
+    }
     req.user = decoded;
   });
   if (req.user.is_admin != Boolean(true)) {
