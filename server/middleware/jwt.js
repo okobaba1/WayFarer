@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 
 export const verifyAdmin = (req, res, next) => {
-  const tokenBearer = req.headers.authorization;
-  const token = tokenBearer.slice(7, tokenBearer.length);
+  const token = req.headers['x-access-token'];
+  console.log(token)
+  // const token = tokenBearer.slice(7, tokenBearer.length);
   if (!token) {
     return res.status(402).json({
       status: 402,
