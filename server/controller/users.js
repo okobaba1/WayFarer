@@ -217,7 +217,11 @@ const Users = {
   async makeBooking(req, res) {
     try {
       const { email, id } = req.user;
-      const { trip_id, seat_number } = req.body;
+      const { trip_id } = req.body;
+      let { seat_number } = req.body;
+      if (!seat_number) {
+        seat_number = Math.floor(Math.random() * 13) + 1;
+      }
       const checkUser = {
         text: 'SELECT * FROM users WHERE email = $1',
         values: [email],
@@ -272,6 +276,7 @@ const Users = {
         },
       });
     } catch (error) {
+      console.log(error.message)
       return res.status(500).json({
         status: 500,
         error: `Internal server error ${error.message}`,
