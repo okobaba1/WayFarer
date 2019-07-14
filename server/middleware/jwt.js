@@ -53,7 +53,7 @@ export const verifyUser = (req, res, next) => {
 };
 
 export const verifyHelp = (req, res, next) => {
-  const token = req.headers['x-access-token'];
+  const { token } = req.headers;
   if (!token) {
     return res.status(401).json({
       status: 401,
