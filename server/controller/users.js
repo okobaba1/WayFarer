@@ -287,8 +287,10 @@ const Users = {
     try {
       const { is_admin, id } = req.user;
       if (is_admin == Boolean(true)) {
-        const checkBookings = { text: 'SELECT * FROM bookings' };
-        const { rows } = await db.query(checkBookings);
+        const { rows } = await db.query(
+          'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email,',
+          'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
+        );
         if (!rows[0]) {
           return res.status(404).json({
             status: 404,
@@ -300,11 +302,12 @@ const Users = {
           data: rows,
         });
       }
-      const checkBookings = {
-        text: 'SELECT * FROM bookings WHERE user_id = $1',
-        values: [id],
-      };
-      const { rows } = await db.query(checkBookings);
+      const { rows } = await db.query(
+        'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
+        'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
+        'booking.user_id=$1',
+        [id],
+      );
       if (!rows[0]) {
         return res.status(404).json({
           status: 404,
