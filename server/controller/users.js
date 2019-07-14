@@ -287,10 +287,14 @@ const Users = {
     try {
       const { is_admin, id } = req.user;
       if (is_admin == Boolean(true)) {
-        const { rows } = await db.query(
-          'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email,',
-          'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
-        );
+        const checkBookings = {
+          text: `SELECT 
+        bookings.id AS booking_id,bookings.user_id, bookings.seat_number, bookings.trip_id, 
+        trips.bus_id, trips.origin, trips.destination, trips.trip_date, trips.status,
+        users.first_name, users.last_name, users.email
+        FROM bookings JOIN trips ON (bookings.trip_id = trips.id) JOIN users ON (bookings.user_id = users.id)`,
+        };
+        const { rows } = await db.query(checkBookings);
         if (!rows[0]) {
           return res.status(404).json({
             status: 404,
@@ -302,12 +306,15 @@ const Users = {
           data: rows,
         });
       }
-      const { rows } = await db.query(
-        'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
-        'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
-        'booking.user_id=$1',
-        [id],
-      );
+      const checkBookings = {
+        text: `SELECT 
+      bookings.id AS booking_id,bookings.user_id, bookings.seat_number, bookings.trip_id, 
+      trips.bus_id, trips.origin, trips.destination, trips.trip_date, trips.status,
+      users.first_name, users.last_name, users.email
+      FROM bookings JOIN trips ON (bookings.trip_id = trips.id) JOIN users ON (bookings.user_id = users.id) WHERE user_id = $1`,
+        values: [id],
+      };
+      const { rows } = await db.query(checkBookings);
       if (!rows[0]) {
         return res.status(404).json({
           status: 404,
