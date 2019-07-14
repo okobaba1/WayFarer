@@ -122,7 +122,6 @@ const Users = {
           error: 'Please input date in YYYY-MM-DD format',
         });
       }
-      console.log(bus_id)
       const checkbus = {
         text: 'SELECT * FROM buses WHERE id = $1',
         values: [bus_id],
@@ -142,7 +141,7 @@ const Users = {
       return res.status(201).json({
         status: 'success',
         data: {
-          trip_id: create[0].id,
+          id: create[0].id,
           bus_id,
           origin,
           destination,
