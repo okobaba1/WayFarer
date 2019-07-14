@@ -1,14 +1,11 @@
 import jwt from 'jsonwebtoken';
 
 export const verifyAdmin = (req, res, next) => {
-  const token = req.headers.token;
-  // if (token && token.startsWith('Bearer ')) {
-  //   token = token.slice(7, token.length);
-  // }
+  const { token } = req.headers;
   console.log(token)
   if (!token) {
-    return res.status(402).json({
-      status: 402,
+    return res.status(401).json({
+      status: 401,
       error: 'No token provided.',
     });
   }

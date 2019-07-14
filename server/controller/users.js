@@ -128,8 +128,8 @@ const Users = {
       };
       const { rows } = await db.query(checkbus);
       if (!rows[0]) {
-        return res.status(404).json({
-          status: 404,
+        return res.status(433).json({
+          status: 433,
           error: 'Not an available bus',
         });
       }
