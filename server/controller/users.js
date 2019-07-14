@@ -122,14 +122,15 @@ const Users = {
           error: 'Please input date in YYYY-MM-DD format',
         });
       }
+      console.log(bus_id)
       const checkbus = {
         text: 'SELECT * FROM buses WHERE id = $1',
         values: [bus_id],
       };
       const { rows } = await db.query(checkbus);
       if (!rows[0]) {
-        return res.status(433).json({
-          status: 433,
+        return res.status(404).json({
+          status: 404,
           error: 'Not an available bus',
         });
       }
