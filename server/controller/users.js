@@ -260,7 +260,7 @@ const Users = {
       return res.status(201).json({
         status: 'success',
         data: {
-          booking_id: booking[0].id,
+          id: booking[0].id,
           user_id: id,
           trip_id,
           bus_id: trip[0].bus_id,
