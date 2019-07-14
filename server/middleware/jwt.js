@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 
 export const verifyAdmin = (req, res, next) => {
-  let token = req.headers.Authorization;
-  if (token && token.startsWith('Bearer ')) {
-    token = token.slice(7, token.length);
-  }
+  const token = req.headers.token;
+  // if (token && token.startsWith('Bearer ')) {
+  //   token = token.slice(7, token.length);
+  // }
   console.log(token)
   if (!token) {
     return res.status(402).json({
