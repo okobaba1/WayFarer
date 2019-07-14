@@ -150,6 +150,7 @@ describe('User', ()=> {
   it('No trips', (done) => {
     chai.request(app)
       .get('/api/v1/trips')
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -162,6 +163,7 @@ describe('User', ()=> {
     chai.request(app)
       .get('/api/v1/trips')
       .query({ origin: 'ibadan' })
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -174,6 +176,7 @@ describe('User', ()=> {
     chai.request(app)
       .get('/api/v1/trips')
       .query({ destination: 'ibadan' })
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -195,7 +198,7 @@ describe('User', ()=> {
     chai.request(app)
       .post('/api/v1/trips')
       .send(user)
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(201);
         expect(res.body).be.an('object');
@@ -235,7 +238,7 @@ describe('User', ()=> {
     chai.request(app)
       .post('/api/v1/trips')
       .send(user)
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(406);
         expect(res.body).be.an('object');
@@ -247,6 +250,7 @@ describe('User', ()=> {
   it('All trips', (done) => {
     chai.request(app)
       .get('/api/v1/trips')
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
@@ -264,13 +268,30 @@ describe('User', ()=> {
     chai.request(app)
       .post('/api/v1/bookings')
       .send(user)
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(201);
         expect(res.body).be.an('object');
         expect(res.body.status).be.a('string');
         expect(res.body.data).be.an('object');
         assert.equal(res.body.status, 'success');
+        done();
+      });
+  });
+
+  it('post booking no token', (done) => {
+    const user = {
+      trip_id: 1,
+      seat_number: 5,
+    };
+    chai.request(app)
+      .post('/api/v1/bookings')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(401);
+        expect(res.body).be.an('object');
+        expect(res.body.status).be.a('number');
+        assert.equal(res.body.error, 'No token provided.');
         done();
       });
   });
@@ -282,7 +303,7 @@ describe('User', ()=> {
     chai.request(app)
       .post('/api/v1/bookings')
       .send(user)
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -300,7 +321,7 @@ describe('User', ()=> {
     chai.request(app)
       .get('/api/v1/bookings')
       .send(user)
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
@@ -318,7 +339,6 @@ describe('User', ()=> {
     chai.request(app)
       .get('/api/v1/bookings')
       .send(user)
-      // .set('x-access-token', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
@@ -335,7 +355,7 @@ describe('User', ()=> {
     chai.request(app)
       .get('/api/v1/bookings')
       .send(user)
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
@@ -352,7 +372,7 @@ describe('User', ()=> {
     chai.request(app)
       .patch('/api/v1/bookings/1')
       .send(user)
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(201);
         expect(res.body).be.an('object');
@@ -369,7 +389,7 @@ describe('User', ()=> {
     chai.request(app)
       .patch('/api/v1/bookings/5')
       .send(user)
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -381,7 +401,7 @@ describe('User', ()=> {
   it('User delete booking', (done) => {
     chai.request(app)
       .delete('/api/v1/bookings/1')
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
@@ -394,7 +414,7 @@ describe('User', ()=> {
   it('No booking found', (done) => {
     chai.request(app)
       .delete('/api/v1/bookings/4')
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
@@ -406,7 +426,7 @@ describe('User', ()=> {
   it('Not authorized', (done) => {
     chai.request(app)
       .delete('/api/v1/bookings/4')
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
@@ -418,7 +438,7 @@ describe('User', ()=> {
   it('Not active trip', (done) => {
     chai.request(app)
       .patch('/api/v1/trips/7')
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(400);
         expect(res.body).be.an('object');
@@ -430,7 +450,7 @@ describe('User', ()=> {
   it('Cancelled trip', (done) => {
     chai.request(app)
       .patch('/api/v1/trips/1')
-      .set('x-access-token', adminToken)
+      .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
@@ -443,7 +463,7 @@ describe('User', ()=> {
   it('user error', (done) => {
     chai.request(app)
       .patch('/api/v1/trips/1')
-      .set('x-access-token', userToken)
+      .set('token', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
