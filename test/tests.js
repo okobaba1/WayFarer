@@ -11,7 +11,7 @@ dotenv.config();
 should();
 
 
-describe('User', ()=> {
+describe('User', () => {
   const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvcmFkbWluQHdheWZhcmVyLmNvbSIsImlkIjoxLCJpc19hZG1pbiI6dHJ1ZSwiaWF0IjoxNTYyNjI2Mzk3LCJleHAiOjE1NjYzMTI3OTd9.DP78i0BpIkajBVL86g0LVLasXtKv0Cc27pKh6Eihi8o';
   const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBnbWFpbC5jb20iLCJpZCI6MiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NjI4NjIxNzIsImV4cCI6MTU2NjU0ODU3Mn0.VxGhw42I10jzeh-RvmQZTfmm3RwtS0l5_RicWUsjui8';
 
@@ -52,9 +52,9 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(409);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         expect(res.body.error).be.an('string');
-        assert.equal(res.body.status, 409);
+        assert.equal(res.body.status, 'error');
         assert.equal(res.body.error, 'User already exists');
         done();
       });
@@ -72,8 +72,8 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(400);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
-        assert.equal(res.body.status, 400);
+        expect(res.body.status).be.a('string');
+        assert.equal(res.body.status, 'error');
         done();
       });
   });
@@ -89,9 +89,9 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(200);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         expect(res.body.data).be.an('object');
-        assert.equal(res.body.status, 200);
+        assert.equal(res.body.status, 'success');
         assert.equal(res.body.message, 'login successsful');
         done();
       });
@@ -107,9 +107,9 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
-        assert.equal(res.body.status, 401);
-        assert.equal(res.body.error, 'Incorrect password');
+        expect(res.body.status).be.a('string');
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.error, 'Incorrect email/password');
         done();
       });
   });
@@ -124,9 +124,9 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(400);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
-        assert.equal(res.body.status, 400);
-        assert.equal(res.body.error, 'Please sign Up');
+        expect(res.body.status).be.a('string');
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.error, 'Incorrect email/password');
         done();
       });
   });
@@ -141,8 +141,8 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(400);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
-        assert.equal(res.body.status, 400);
+        expect(res.body.status).be.a('string');
+        assert.equal(res.body.status, 'error');
         assert.equal(res.body.error, 'kindly put in your email and password');
         done();
       });
@@ -154,7 +154,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No available trip');
         done();
       });
@@ -167,7 +167,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No available trip');
         done();
       });
@@ -180,7 +180,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No available trip');
         done();
       });
@@ -222,7 +222,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No token provided.');
         done();
       });
@@ -242,7 +242,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(406);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'Please input date in YYYY-MM-DD format');
         done();
       });
@@ -290,7 +290,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No token provided.');
         done();
       });
@@ -307,8 +307,8 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
-        assert.equal(res.body.status, 404);
+        expect(res.body.status).be.a('string');
+        assert.equal(res.body.status, 'error');
         assert.equal(res.body.error, 'trip not available');
         done();
       });
@@ -342,7 +342,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No token provided.');
         done();
       });
@@ -393,7 +393,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No booking found');
         done();
       });
@@ -418,7 +418,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(404);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'No booking found');
         done();
       });
@@ -430,7 +430,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'Not authorized to perform this operation');
         done();
       });
@@ -442,7 +442,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(400);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'Not an active trip');
         done();
       });
@@ -467,7 +467,7 @@ describe('User', ()=> {
       .end((err, res) => {
         res.should.have.status(401);
         expect(res.body).be.an('object');
-        expect(res.body.status).be.a('number');
+        expect(res.body.status).be.a('string');
         assert.equal(res.body.error, 'Not authorized to perform this operation');
         done();
       });
