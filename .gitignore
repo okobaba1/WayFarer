@@ -2,4 +2,3 @@ node_modules
 .env
 .nyc_output
 dist
-.nyc_output/processinfo/index.json
