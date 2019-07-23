@@ -15,7 +15,7 @@ const makeTrip = [
   check('destination').not().isEmpty().withMessage('Kindly input destination.'),
   check('bus_id').not().isEmpty().withMessage('Kindly input bus id.'),
   check('trip_date').not().isEmpty().withMessage('Kindly input trip date.'),
-  
+
 ];
 
 
@@ -23,7 +23,7 @@ const validationHandler = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
-      status: 400,
+      status: 'error',
       error: errors.array().map(error => error.msg)[0],
     });
   }

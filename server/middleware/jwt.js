@@ -4,14 +4,14 @@ export const verifyAdmin = (req, res, next) => {
   const { token } = req.headers;
   if (!token) {
     return res.status(401).json({
-      status: 401,
+      status: 'error',
       error: 'No token provided.',
     });
   }
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: 'Failed to Authenticate token',
       });
     }
@@ -19,7 +19,7 @@ export const verifyAdmin = (req, res, next) => {
   });
   if (req.user.is_admin != Boolean(true)) {
     return res.status(401).json({
-      status: 401,
+      status: 'error',
       error: 'Not authorized to perform this operation',
     });
   }
@@ -30,14 +30,14 @@ export const verifyUser = (req, res, next) => {
   const { token } = req.headers;
   if (!token) {
     return res.status(401).json({
-      status: 401,
+      status: 'error',
       error: 'No token provided.',
     });
   }
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: 'Failed to Authenticate token',
       });
     }   
@@ -45,7 +45,7 @@ export const verifyUser = (req, res, next) => {
   });
   if (req.user.is_admin == Boolean(true)) {
     return res.status(401).json({
-      status: 401,
+      status: 'error',
       error: 'Not authorized to perform this operation',
     });
   }
@@ -56,14 +56,14 @@ export const verifyHelp = (req, res, next) => {
   const { token } = req.headers;
   if (!token) {
     return res.status(401).json({
-      status: 401,
+      status: 'error',
       error: 'No token provided.',
     });
   }
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: 'Failed to Authenticate token',
       });
     }

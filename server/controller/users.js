@@ -9,13 +9,15 @@ const Users = {
     try {
       if (!req.body.email || !req.body.password) {
         return res.status(400).json({
+          status: 'error',
           error: 'Some values are missing',
         });
       }
       const {
-        email, first_name, last_name, password,
+        email: upperEmail, first_name, last_name, password,
       } = req.body;
 
+      const email = upperEmail.toLowerCase();
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const checkUser = {
@@ -30,7 +32,7 @@ const Users = {
       const { rows } = await db.query(checkUser);
       if (rows[0]) {
         return res.status(409).json({
-          status: 409,
+          status: 'error',
           error: 'User already exists',
         });
       }
@@ -54,7 +56,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -64,11 +66,12 @@ const Users = {
     try {
       if (!req.body.email || !req.body.password) {
         return res.status(400).json({
-          status: 400,
+          status: 'error',
           error: 'kindly put in your email and password',
         });
       }
-      const { email, password } = req.body;
+      const { email: upperEmail, password } = req.body;
+      const email = upperEmail.toLowerCase();
       const checkUser = {
         text: 'SELECT * FROM users WHERE email = $1',
         values: [email],
@@ -76,14 +79,14 @@ const Users = {
       const { rows } = await db.query(checkUser);
       if (!rows[0]) {
         return res.status(400).json({
-          status: 400,
-          error: 'Please sign Up',
+          status: 'error',
+          error: 'Incorrect email/password',
         });
       } bcrypt.compare(password, rows[0].password, (error, response) => {
         if (!response) {
           return res.status(401).json({
-            status: 401,
-            error: 'Incorrect password',
+            status: 'error',
+            error: 'Incorrect email/password',
           });
         } const token = jwt.sign({
           email,
@@ -91,7 +94,7 @@ const Users = {
           is_admin: rows[0].is_admin,
         }, process.env.SECRET_KEY, { expiresIn: '1024hrs' });
         return res.status(200).json({
-          status: 200,
+          status: 'success',
           message: 'login successsful',
           data: {
             token,
@@ -104,7 +107,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -118,7 +121,7 @@ const Users = {
       const dateCheck = moment(trip_date).format('YYYY-MM-DD');
       if (dateCheck === 'Invalid date') {
         return res.status(406).json({
-          status: 406,
+          status: 'error',
           error: 'Please input date in YYYY-MM-DD format',
         });
       }
@@ -129,7 +132,7 @@ const Users = {
       const { rows } = await db.query(checkbus);
       if (!rows[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'Not an available bus',
         });
       }
@@ -151,7 +154,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -168,7 +171,7 @@ const Users = {
         const { rows: orijin } = await db.query(getOrigin);
         if (!orijin[0]) {
           return res.status(404).json({
-            status: 404,
+            status: 'error',
             error: 'No available trip',
           });
         }
@@ -185,7 +188,7 @@ const Users = {
         const { rows: destine } = await db.query(getDestination);
         if (!destine[0]) {
           return res.status(404).json({
-            status: 404,
+            status: 'error',
             error: 'No available trip',
           });
         }
@@ -198,7 +201,7 @@ const Users = {
       const { rows } = await db.query(getTrips);
       if (!rows[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'No available trip',
         });
       }
@@ -208,7 +211,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -238,21 +241,21 @@ const Users = {
       const { rows } = await db.query(checkUser);
       if (!rows[0]) {
         return res.status(401).json({
-          status: 401,
+          status: 'error',
           error: 'Please sign up',
         });
       }
       const { rows: trip } = await db.query(checkTrip);
       if (!trip[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'trip not available',
         });
       }
       const { rows: seat } = await db.query(checkSeat);
       if (seat[0]) {
         return res.status(409).json({
-          status: 409,
+          status: 'error',
           error: 'Seat number already taken',
         });
       }
@@ -277,7 +280,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -297,7 +300,7 @@ const Users = {
         const { rows } = await db.query(checkBookings);
         if (!rows[0]) {
           return res.status(404).json({
-            status: 404,
+            status: 'error',
             error: 'No booking found',
           });
         }
@@ -317,7 +320,7 @@ const Users = {
       const { rows } = await db.query(checkBookings);
       if (!rows[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'No booking found',
         });
       }
@@ -327,7 +330,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -344,7 +347,7 @@ const Users = {
       const { rows } = await db.query(checkBooking);
       if (!rows[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'No booking found',
         });
       }
@@ -361,7 +364,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -377,7 +380,7 @@ const Users = {
       const { rows } = await db.query(checkTrip);
       if (!rows[0]) {
         return res.status(400).json({
-          status: 400,
+          status: 'error',
           error: 'Not an active trip',
         });
       }
@@ -394,7 +397,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
@@ -412,7 +415,7 @@ const Users = {
       const { rows } = await db.query(checkBooking);
       if (!rows[0]) {
         return res.status(404).json({
-          status: 404,
+          status: 'error',
           error: 'No booking found',
         });
       }
@@ -423,7 +426,7 @@ const Users = {
       const { rows: seats } = await db.query(checknumber);
       if (seats[0]) {
         return res.status(401).json({
-          status: 401,
+          status: 'error',
           error: 'seat already taken',
         });
       }
@@ -444,7 +447,7 @@ const Users = {
       });
     } catch (error) {
       return res.status(500).json({
-        status: 500,
+        status: 'error',
         error: `Internal server error ${error.message}`,
       });
     }
